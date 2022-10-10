@@ -77,6 +77,7 @@ for (z in 1:length(lat)){
 ## 3b- Average data only for July-August
 mth1<-7
 mth2<-8
+mth3<-6
 
 D13C_jules_ja<-array(NA,dim = c(length(lon),length(lat),length(yr1:yr2)))
 GPP_jules_ja<-array(NA,dim = c(length(lon),length(lat),length(yr1:yr2)))
@@ -93,14 +94,14 @@ for (z in 1:length(lat)){
     
     for (j in 1:length(yr1:yr2)){
       
-      D13C_jules_ja[k,z,j]<-mean(D13C_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      GPP_jules_ja[k,z,j]<-mean(GPP_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      Tair_jules_ja[k,z,j]<-mean(Tair_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      co2_jules_ja[k,z,j]<-mean(co2_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      fsmc_jules_ja[k,z,j]<-mean(fsmc_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      smc_avail_top_jules_ja[k,z,j]<-mean(smc_avail_top_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      vpd_jules_ja[k,z,j]<-mean(vpd_jules[(i:(i+11)),k,z][mth1:mth2],na.rm=T)
-      par_jules_ja[k,z,j]<-mean(par_jules[k,z,(i:(i+11))][mth1:mth2],na.rm=T)
+      D13C_jules_ja[k,z,j]<-mean(D13C_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      GPP_jules_ja[k,z,j]<-mean(GPP_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      Tair_jules_ja[k,z,j]<-mean(Tair_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      co2_jules_ja[k,z,j]<-mean(co2_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      fsmc_jules_ja[k,z,j]<-mean(fsmc_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      smc_avail_top_jules_ja[k,z,j]<-mean(smc_avail_top_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      vpd_jules_ja[k,z,j]<-mean(vpd_jules[(i:(i+11)),k,z][mth1:mth2:mth3],na.rm=T)
+      par_jules_ja[k,z,j]<-mean(par_jules[k,z,(i:(i+11))][mth1:mth2:mth3],na.rm=T)
       i<-i+12
       
     }
@@ -481,4 +482,15 @@ plot2
  
 ggsave("FigureS1.jpeg",plot2, width = 10,height=8, dpi = 1000)
 
+## 1:1 line scatter plot
+library(ggplot2)
+library(ggpubr)
+library(ggpmisc)
+scatter<-ggplot(data, aes(x = Observations, y = Predictions)) +
+  theme_classic() +
+  geom_point(mapping=aes(x = Observations, y = Predictions),col="Blue") +
+  scale_x_continuous(limits = c(20, 24),breaks = seq(20,24,1)) +
+  scale_x_continuous(limits = c(18,24),breaks = seq(18,24,1)) +
+  geom_abline(slope = 1, intercept = 0)
+ggsave("scatter.jpeg",scatter, width = 10,height=8, dpi = 1000)
 
